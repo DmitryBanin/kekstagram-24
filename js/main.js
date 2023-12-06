@@ -1,24 +1,43 @@
-function getRandomIntegerInRange(from, to) {
-  // Проверяем, являются ли аргументы целыми числами и "до" больше или равно "от"
-  if (!Number.isInteger(from) || !Number.isInteger(to) || to < from) {
-    throw new Error('Неверные аргументы. "До" должно быть больше или равно "от", и оба должны быть целыми числами.');
-  }
+import {DESCRIPTIONS, LIKES, AVATAR, MESSAGES, NAMES } from './mock/data.js';
+import { getRandomIntegerInRange } from './utils/utils.js';
 
-  // Генерируем случайное целое число в диапазоне от "от" до "до"
-  return Math.floor(Math.random() * (to - from + 1)) + from;
-}
+const SIMILAR_USERS_COUNT = 25;
+const COMMENTS_COUNT = 7;
+const COMMENTS_ID = SIMILAR_USERS_COUNT * COMMENTS_COUNT;
 
-getRandomIntegerInRange();
+const arrayIndex = Array.from({ length: COMMENTS_ID}, (value, index) => {
+  index++;
+  return index;
+});
 
+// eslint-disable-next-line no-console
+console.log(arrayIndex);
 
-function isStringWithinMaxLength(str, maxLength) {
-  // Проверяем, является ли аргумент str строкой и maxLength положительным числом
-  if (typeof str !== 'string' || typeof maxLength !== 'number' || maxLength <= 0) {
-    throw new Error('Неверные аргументы. Первый аргумент должен быть строкой, а второй - положительным числом.');
-  }
+const creatComment = () => {
+  const randomIndex = getRandomIntegerInRange(0, arrayIndex.length-1);
+  const randomValue = arrayIndex[randomIndex];
+  arrayIndex.splice(randomIndex, 1);
+  return {
+    id: randomValue,
+    avatar: `img/avatar-${getRandomIntegerInRange(...AVATAR)}.svg`,
+    messages: MESSAGES[getRandomIntegerInRange(0, MESSAGES.length-1)],
+    names: NAMES[getRandomIntegerInRange(0, NAMES.length-1)],
+  };
+};
 
-  // Проверяем длину строки и возвращаем true, если она не превышает максимальную длину, и false в противном случае
-  return str.length <= maxLength;
-}
+const creatUser = (value, index) => {
+  const similarComments = Array.from({ length: getRandomIntegerInRange(0, COMMENTS_COUNT)}, creatComment);
+  index++;
+  return {
+    id: index,
+    url: `photos/${index}.jpg`,
+    descriptions: DESCRIPTIONS[getRandomIntegerInRange(0, DESCRIPTIONS.length-1)],
+    likes: getRandomIntegerInRange(...LIKES),
+    comments: similarComments,
+  };
+};
 
-isStringWithinMaxLength();
+const simsilarUsers = Array.from({ length: SIMILAR_USERS_COUNT}, creatUser);
+
+// eslint-disable-next-line no-console
+console.log(simsilarUsers);
