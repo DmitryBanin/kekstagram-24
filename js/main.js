@@ -10,9 +10,6 @@ const arrayIndex = Array.from({ length: COMMENTS_ID}, (value, index) => {
   return index;
 });
 
-// eslint-disable-next-line no-console
-console.log(arrayIndex);
-
 const creatComment = () => {
   const randomIndex = getRandomIntegerInRange(0, arrayIndex.length-1);
   const randomValue = arrayIndex[randomIndex];
